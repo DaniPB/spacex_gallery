@@ -1,0 +1,11 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: ruby app.rb
+    volumes:
+      - .:/spacex_gallery
+    ports:
+      - "9000:9000"
+    stdin_open: true
+    tty: true
