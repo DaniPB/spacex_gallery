@@ -13,6 +13,6 @@ RUN apt-get update
 
 ADD . $APP_HOME
 
-EXPOSE 9000
+EXPOSE 80
 
 ENTRYPOINT ["./docker_entrypoint"]

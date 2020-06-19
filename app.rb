@@ -7,29 +7,26 @@ require 'sinatra/base'
 require 'sinatra/custom_logger'
 require 'logger'
 
-require './services/create_payment_methods.rb'
-require './services/request_trips.rb'
-require './services/finish_trips.rb'
-
-configure { set :server, :puma }
+require './services/get_last_launch.rb'
 
 class App < Sinatra::Base
-  helpers Sinatra::CustomLogger
 
   set :bind, '0.0.0.0'
-  set :port, 8080
-  set :current_dir, Dir.pwd
-
-  Dir["#{settings.current_dir}/models/*.rb"].each { |file| require file }
-
-  configure :development, :production do
-    logger = Logger.new(File.open("#{root}/log/#{environment}.log", 'a'))
-    logger.level = Logger::DEBUG if development?
-    set :logger, logger
-  end
+  set :port, 80
+  set :public_folder, File.dirname(__FILE__) + '/static'
 
   get '/' do
     "Hello World"
+  end
+
+  get '/gallery' do
+    launch_info = GetLastLaunch.new.()
+    @name = launch_info[:name]
+    @images = launch_info[:images]
+    @date = launch_info[:launch_date_local]
+    console.log(@name)
+
+    erb :gallery
   end
 
   run! if app_file == $0
